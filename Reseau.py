@@ -33,13 +33,34 @@ class Reseau:
     def set_strategie(self, strat: StrategieReseau):
         self.strat = strat
 
-    def valider_reseau(self) -> bool:
-        # TODO
-        return False
+    def valider_reseau(self) -> bool:  
+       
+       if self.noeud_entree not in self.noeuds:
+           return False    
+       n_visites ={self.noeud_entree}
+       n_a_voir =[self.noeud_entree]
+       while n_a_voir:
+            n_a_explorer = n_a_voir.pop()
+            for (noeuds1 , noeuds2) in self.arcs:
+                if noeuds1 == n_a_explorer and noeuds2 not in n_visites:
+                    n_visites.add(noeuds2)
+                    n_a_voir.append(noeuds2)
+                elif noeuds2 == n_a_explorer and noeuds1 not in n_visites:
+                    n_visites.add(noeuds1)
+                    n_a_voir.append(noeuds1)
+        
+       for n in self.noeuds:
+          if n not in n_visites:
+              return False
+       return True
 
     def valider_distribution(self, t: Terrain) -> bool:
-        # TODO
-        return False
+        if not self.valider_reseau() :
+            return False
+        for (i , j) in t.get_clients():
+            if (i,j)  not in self.noeuds.values():
+                return False
+        return True
 
     def configurer(self, t: Terrain):
         self.noeud_entree, self.noeuds, self.arcs  = self.strat.configurer(t)
