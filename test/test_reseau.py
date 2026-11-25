@@ -8,8 +8,12 @@ from Terrain import Terrain, Case
 class TestReseau(unittest.TestCase):
 
     def test_definition_entree(self):
-        # TODO
-        self.fail()
+        r = Reseau()
+        r.ajouter_noeud(1, (0, 2))
+        r.definir_entree(1)
+        self.assertEqual(r.noeud_entree, 1)
+        r.definir_entree(99)               
+        self.assertEqual(r.noeud_entree, -1)
 
     def test_ajout_noeud(self):
         r = Reseau()
